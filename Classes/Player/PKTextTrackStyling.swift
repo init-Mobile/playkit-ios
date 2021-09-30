@@ -5,7 +5,7 @@
 //  Created by Nilit Danan on 5/16/19.
 //
 
-import Foundation
+import UIKit
 import CoreMedia
 
 struct RGBA: CustomStringConvertible {

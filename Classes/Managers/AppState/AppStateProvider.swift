@@ -8,7 +8,7 @@
 // https://www.gnu.org/licenses/agpl-3.0.html
 // ===================================================================================================
 
-import Foundation
+import UIKit
 
 /// The delegate of `AppStateProvider`, allows the delegate to inform on app state notifications.
 public protocol AppStateProviderDelegate: class {
