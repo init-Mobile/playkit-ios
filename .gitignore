@@ -22,3 +22,7 @@ xcuserdata/
 
 # CocoaPods
 Pods/
+
+# SwiftPM
+.swiftpm
+Package.resolved
