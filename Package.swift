@@ -10,8 +10,9 @@ let package = Package(
     ],
     products: [
         .library(
-                name: "PlayKit",
-                targets: ["PlayKit"]),
+            name: "PlayKit",
+            targets: ["PlayKit"]
+        ),
     ],
     dependencies: [
         .package(url: "https://github.com/SwiftyJSON/SwiftyJSON", .upToNextMinor(from: "5.0.1")),
@@ -21,15 +22,20 @@ let package = Package(
     ],
     targets: [
         .target(
-                name: "PlayKit",
-                dependencies: [
-                    "SwiftyJSON",
-                    "XCGLogger",
-                    "KalturaNetKit",
-                    "PlayKitUtils"
-                ],
-                path: "Classes"
-        ),
+            name: "PlayKit",
+            dependencies: [
+                "SwiftyJSON",
+                "XCGLogger",
+                "KalturaNetKit",
+                "PlayKitUtils"
+            ],
+            path: "./",
+            exclude: [
+                "Example",
+                "TestApp",
+                "Widevine"
+            ]
+        )
     ],
     swiftLanguageVersions: [.v5]
 )
