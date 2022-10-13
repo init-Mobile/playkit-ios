@@ -43,6 +43,7 @@ public class AVPlayerEngine: AVPlayer {
     static var observerContext = 0
     /// Indicates if a seek to live edge was triggered prior setting the current item
     var seekToLiveEdgeTriggered = false
+    var allowAudioFromVideoAssetInBackground = false
     
     var internalDuration: TimeInterval = 0.0 {
         didSet {
@@ -421,10 +422,21 @@ public class AVPlayerEngine: AVPlayer {
             attributes.updateValue(fontFamily, forKey: fontFamilyNameKey)
         }
         
+        if let percentage = textTrackStyling.orthogonalLinePositionPercentage {
+            attributes.updateValue(percentage,
+                                   forKey: kCMTextMarkupAttribute_OrthogonalLinePositionPercentageRelativeToWritingDirection as String)
+        }
+        
+        if let percentage = textTrackStyling.textPositionPercentage {
+            attributes.updateValue(percentage,
+                                   forKey: kCMTextMarkupAttribute_TextPositionPercentageRelativeToWritingDirection as String)
+        }
+        
         guard let textStyleRule = AVTextStyleRule(textMarkupAttributes: attributes) else {
             PKLog.debug("Couldn't create AVTextStyleRule.")
             return
         }
+        
         self.currentItem?.textStyleRules = [textStyleRule]
     }
 }
@@ -448,12 +460,20 @@ extension AVPlayerEngine: AppStateObservable {
                 
                 PKLog.debug("player: \(self)\n Did enter background, finishing up...")
                 self.startBackgroundTask()
+                
+                if self.allowAudioFromVideoAssetInBackground {
+                    self.playerLayer?.player = nil
+                }
             }),
             NotificationObservation(name: UIApplication.willEnterForegroundNotification, onObserve: { [weak self] in
                 guard let self = self else { return }
                 
                 PKLog.debug("player: \(self)\n Will enter foreground...")
                 self.endBackgroundTask()
+                
+                if self.playerLayer?.player == nil {
+                    self.playerLayer?.player = self
+                }
             })
         ]
     }

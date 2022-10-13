@@ -146,6 +146,8 @@ enum PlayerSettingsType {
     case preferredForwardBufferDuration(Double)
     case automaticallyWaitsToMinimizeStalling(Bool)
     case configuredTimeOffsetFromLive(CMTime)
+    case preventsDisplaySleepDuringVideoPlayback(Bool)
+    case allowAudioFromVideoAssetInBackground(Bool)
 }
 
 /************************************************************/
@@ -172,6 +174,15 @@ enum PlayerSettingsType {
     @objc public var contentRequestAdapter: PKRequestParamsAdapter?
     @objc public var licenseRequestAdapter: PKRequestParamsAdapter?
     
+    /// AVPlayer.preventsDisplaySleepDuringVideoPlayback representation for PlayKit player settings.
+    /// Setting this property to NO does not force the display to sleep, it simply stops preventing display sleep.
+    /// @available(iOS 12.0, tvOS 12.0, *)
+    @objc public var preventsDisplaySleepDuringVideoPlayback: Bool = true {
+        didSet {
+            self.onChange?(.preventsDisplaySleepDuringVideoPlayback(preventsDisplaySleepDuringVideoPlayback))
+        }
+    }
+    
     @objc public var fairPlayLicenseProvider: FairPlayLicenseProvider?
     @objc public var allowFairPlayOnExternalScreens = false
     
@@ -180,6 +191,15 @@ enum PlayerSettingsType {
     /// If insufficient media data is buffered for playback to start (e.g. if the current item has a value of YES for playbackBufferEmpty), the receiver will act as if the buffer became empty during playback, except that no AVPlayerItemPlaybackStalledNotification will be posted.
     /// @available(iOS 10.0, tvOS 10.0, *)
     @objc public var shouldPlayImmediately = false
+    
+    /// If you would like to enable the audio of a video asset to continue to play in the background set this value to true.
+    /// In case the asset is an audio only asset, this can be kept false but will work as well if set as true.
+    /// NOTE: If you are enabling PIP this value can NOT be set to true.
+    @objc public var allowAudioFromVideoAssetInBackground = false {
+        didSet {
+            self.onChange?(.allowAudioFromVideoAssetInBackground(allowAudioFromVideoAssetInBackground))
+        }
+    }
     
     @objc public func createCopy() -> PKPlayerSettings {
         let copy = PKPlayerSettings()
