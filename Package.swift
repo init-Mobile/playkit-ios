@@ -4,6 +4,7 @@ import PackageDescription
 
 let package = Package(
     name: "PlayKit",
+    defaultLocalization: "en",
     platforms: [
         .iOS(.v9),
         .tvOS(.v9)
