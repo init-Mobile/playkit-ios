@@ -34,6 +34,7 @@ let package = Package(
             exclude: [
                 "Example",
                 "TestApp",
+                "tvOSTestApp",
                 "Widevine"
             ]
         )
